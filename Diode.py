@@ -16,7 +16,7 @@ from pyrcn.echo_state_network import ESNRegressor
 
 inter = 2 #interpolation amount
 length=201 #datapoints per training example
-    
+usecurrent = 1 #Wether to use the current as an added output
 dataArrayx = [] 
 dataArrayy = [] 
 
@@ -48,7 +48,6 @@ for x in dataArrayy: #Convert to log
       k=0
       for y in x:
           dataArrayy[i,k,0] = log(y[0])
-          dataArrayy[i,k,1] = log(y[1])
           k+=1
       i+=1
     
@@ -124,7 +123,6 @@ for x in dataArrayy2: #Convert to log
       k=0
       for y in x:
           dataArrayy2[i,k,0] = log(y[0])
-          dataArrayy2[i,k,1] = log(y[1])
           k+=1
       i+=1
     
@@ -183,15 +181,32 @@ reg = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = 2
 reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = 200) #Initial point model
 
 start = time.time()
-for i in range(0,len(newtrainy)): #train main model
-    xdata = np.array(newtrainx[i][:])
-    ydata= np.array(newtrainy[i][:])
-    reg.fit(X=xdata, y=ydata)
-    print(i)
+
+
+if usecurrent == 0:
+    for i in range(0,len(newtrainy)): #train main model
+        xdata = np.array(newtrainx[i][:])
+        ydata= np.array(newtrainy[i])[:,0]
+        reg.fit(X=xdata, y=ydata)
+
 
     
-for i in range(0,len(initArrx)): #train initial point model
-    reg2.fit(X=initArrx[i,:], y=initArry[i,:])
+    for i in range(0,len(initArrx)): #train initial point model
+        reg2.fit(X=initArrx[i,:], y=initArry[i,:,0])
+    
+else:
+    for i in range(0,len(newtrainy)): #train main model
+        xdata = np.array(newtrainx[i][:])
+        ydata= np.array(newtrainy[i])[:]
+        reg.fit(X=xdata, y=ydata)
+
+
+    
+    for i in range(0,len(initArrx)): #train initial point model
+        reg2.fit(X=initArrx[i,:], y=initArry[i,:])
+
+
+
 end = time.time()
     
 
