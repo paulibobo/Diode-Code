@@ -216,23 +216,38 @@ y_pred = reg.predict(np.array(newtestx[0][:]))  #Make predictions
 y_pred2 = reg2.predict(np.array(newtestx[0][0:30]))
 
 for i in range(0,30): #Replace initial point preeditions
-
-    y_pred[i,0]=y_pred2[i,0]
+    if usecurrent == 0:
+        y_pred[i]=y_pred2[i]
+    else:
+        y_pred[i,0]=y_pred2[i,0]
 
         
 plt.figure(0) #Plot figure and compute MSE
 
-plt.plot(np.array(newtestx[0])[:,0],y_pred[:,0], color = 'blue' ) 
-plt.plot(np.array(newtestx[0])[:,0],np.array(newtesty[0])[:,0], color='red')
-plt.legend(["ESN prediction","Ground truth"], loc ="lower left") 
-     
+if usecurrent == 0:
+    plt.plot(np.array(newtestx[0])[:,0],y_pred[:], color = 'blue' ) 
+    plt.plot(np.array(newtestx[0])[:,0],np.array(newtesty[0])[:,0], color='red')
+    plt.legend(["ESN prediction","Ground truth"], loc ="lower left") 
+ 
+    mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:]) 
+
+else:
+    plt.plot(np.array(newtestx[0])[:,0],y_pred[:,0], color = 'blue' ) 
+    plt.plot(np.array(newtestx[0])[:,0],np.array(newtesty[0])[:,0], color='red')
+    plt.legend(["ESN prediction","Ground truth"], loc ="lower left") 
+ 
+    mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:,0])        
         
-mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:,0])
+
 
 print("MSE for dataset "": " + str(mse) + " Training time:" + str(end - start) + " seconds")
 
 datafile_path = "res/" + "Optimized.dat" #Save values in .dat file
-np.savetxt(datafile_path , y_pred, fmt=['%10.7f','%10.7f'])
+
+if usecurrent == 0:
+    np.savetxt(datafile_path , y_pred, fmt=['%10.7f'])
+else:
+    np.savetxt(datafile_path , y_pred, fmt=['%10.7f','%10.7f'])
 
 
     ############## 
