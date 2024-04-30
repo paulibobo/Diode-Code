@@ -177,8 +177,8 @@ initArrx = np.array(initArrx)
 initArry = np.array(initArry)
 
 
-reg = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = 2000) #Main model
-reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = 200) #Initial point model
+reg = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, n_reservoir= 2000) #Main model
+reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, n_reservoir= 200) #Initial point model
 
 start = time.time()
 
