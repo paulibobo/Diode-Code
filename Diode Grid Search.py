@@ -180,8 +180,8 @@ for inter in range(0,8):
     
     for ressize in range(0,10):
         trial+=1
-        reg = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = ressize*500) #Main model
-        reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, hidden_layer_size = 200) #Initial point model
+        reg = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, n_reservoir= ressize*500) #Main model
+        reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = 0.3, n_reservoir= 200) #Initial point model
         
         start = time.time()
         for i in range(0,len(newtrainy)): #train main model
