@@ -11,9 +11,8 @@ from sklearn.metrics import mean_squared_error
 from pyrcn.echo_state_network import ESNRegressor
 
 
-#print(sys.version)
 parser = argparse.ArgumentParser()
-parser.add_argument('-epochs', type=int, default=20)
+parser.add_argument('-epochs', type=int, default=2)
 parser.add_argument('-interpolations', type=int, default=2)
 parser.add_argument('-reservoir_size', type=int, default=3500)
 parser.add_argument('-sparsity', type=float, default=0.5)
@@ -158,8 +157,6 @@ if(train == True):
         newtestx.append(temparrx)
     
     
-    plt.plot(np.array(newtestx[0])[:,0],np.array(newtesty[0])[:,0], color='red')
-    plt.legend(["ESN prediction","Ground truth"], loc ="lower left") 
      
     k=0
     
@@ -207,7 +204,7 @@ if(train == True):
             y_pred[i]=y_pred2[i]
     
     
-    #Plot figure and compute MSE
+    #Compute MSE
     
     mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:]) 
     print("MSE for dataset "": " + str(mse) + " Training time:" + str(end - start) + " seconds")
@@ -222,7 +219,7 @@ if(train == True):
         fileprint.append([np.array(newtestx[0])[k,0],num2])
         k+=1
     
-    #print(fileprint)
+
     np.savetxt(datafile_path , fileprint, fmt=['%10.7f','%10.7f'])
         
 
