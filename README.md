@@ -17,10 +17,11 @@ pip install -r requirements.txt
 
 ## Training
 
-To train the model(s) in the paper, run this command:
+To train the model(s) in the paper:
 
+For the results shown in Fig 3:
 ```train
-python Diode.py -epochs 20 -interpolations 2 -reservoir_size 3500 -sparsity 0.5 -savepath <path where to save the results to/> -plots True/False
+python Diode.py -epochs 20 -interpolations 2 -reservoir_size 1000 -sparsity 0.5 -savepath <path where to save the results to/> -plots True/False -train True/False
 ```
 >📋 The input parameters for the training script are:
     * -epochs: The number of epochs to train the model
@@ -29,5 +30,21 @@ python Diode.py -epochs 20 -interpolations 2 -reservoir_size 3500 -sparsity 0.5 
     * -sparsity: Proportion of the reservoir matrix weights forced to be zero.
     * -savepath: The path where to save the weights, model and training history
     * -plots: Whether to plot the inputs and outputs from the dataset or not
+    * -train: Whether to train the model or not
+
+
+For the results shown in Fig 5:
+
+```train
+python DiodeUnseenL.py -epochs 20 -interpolations 2 -reservoir_size 1000 -sparsity 0.5 -savepath <path where to save the results to/> -plots True/False
+```
+>📋 The input parameters for the training script are:
+    * -epochs: The number of epochs to train the model
+    * -interpolations: The number of points to interpolate between consecutive points
+    * -reservoir_size: Size of the reservoir
+    * -sparsity: Proportion of the reservoir matrix weights forced to be zero.
+    * -savepath: The path where to save the weights, model and training history
+    * -plots: Whether to plot the inputs and outputs from the dataset or not
+    * -train: Whether to train the model or not
 
 
