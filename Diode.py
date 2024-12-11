@@ -1,7 +1,7 @@
 import os
 import time
 import argparse
-import math
+
 
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
@@ -11,11 +11,10 @@ from sklearn.metrics import mean_squared_error
 from pyrcn.echo_state_network import ESNRegressor
 
 
-#print(sys.version)
 parser = argparse.ArgumentParser()
-parser.add_argument('-epochs', type=int, default=2)
+parser.add_argument('-epochs', type=int, default=20)
 parser.add_argument('-interpolations', type=int, default=2)
-parser.add_argument('-reservoir_size', type=int, default=3500)
+parser.add_argument('-reservoir_size', type=int, default=500)
 parser.add_argument('-sparsity', type=float, default=0.5)
 parser.add_argument('-savepath', type=str, default="res/Optimized.dat")
 parser.add_argument('-plots', type=bool, default=True)
@@ -27,11 +26,13 @@ epochs = opt.epochs #number of epochs
 r_size = opt.reservoir_size
 spars = opt.sparsity
 datafile_path = opt.savepath
-plotst = opt.plots
+plot = opt.plots
 train = opt.train
 
-if(train == True):
-    length=201 #datapoints per training example
+length=201 #datapoints per training example
+
+if (train==True):
+
     dataArrayx = [] 
     dataArrayy = [] 
     
@@ -157,7 +158,9 @@ if(train == True):
         newtesty.append(temparr)
         newtestx.append(temparrx)
     
-
+    
+    plt.plot(np.array(newtestx[0])[:,0],np.array(newtesty[0])[:,0], color='red')
+    plt.legend(["Ground truth"], loc ="lower left") 
      
     k=0
     
@@ -172,8 +175,8 @@ if(train == True):
     initArry = np.array(initArry)
     
     
-    reg = ESNRegressor(spectral_radius = 0.99, sparsity = spars, n_reservoir= r_size, hidden_size = 1000, feedback = True) #Main model
-    reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = spars, n_reservoir= 200, hidden_size = 1000, feedback = True) #Initial point model
+    reg = ESNRegressor(spectral_radius = 0.99, sparsity = spars, hidden_layer_size = r_size, feedback = True) #Main model
+    reg2 = ESNRegressor(spectral_radius = 0.99, sparsity = spars, hidden_layer_size = 200, feedback = True) #Initial point model
     
     start = time.time()
     
@@ -208,7 +211,6 @@ if(train == True):
     #Plot figure and compute MSE
     
     mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:]) 
-    mse = math.sqrt(mse)/16000
     print("MSE for dataset "": " + str(mse) + " Training time:" + str(end - start) + " seconds")
     
     
@@ -221,14 +223,13 @@ if(train == True):
         fileprint.append([np.array(newtestx[0])[k,0],num2])
         k+=1
     
-    
+
     np.savetxt(datafile_path , fileprint, fmt=['%10.7f','%10.7f'])
         
 
 
-if(plotst == True):
+if(plot == True):
 
-    
     plotArray = []
     fname = "res/true.dat"
     with open(fname) as f:
@@ -292,22 +293,21 @@ if(plotst == True):
     
     xESNo = plotArray[:,0]   # position [um]
     rhoESNo = plotArray[:,1] #electron density [um^(-3)]
-
+    
     
     plt.figure(0)
     plt.plot(xt,rhot, linewidth=2, color = (1,0,0))
     plt.plot(xGRU,rhoGRU, linestyle = 'dashed', linewidth = 2, color= (0,0.7,0))
     plt.plot(xESNu,rhoESNu, linestyle = 'dashed',  linewidth=2,  color=(1,0.6,0))
     plt.plot(xESNo,rhoESNo, linestyle = 'dashed', linewidth=2, color = (0,0,1))
-    
 
     plt.legend(['Ground-truth', 'Predicted - GRU',
       'Predicted - ESN unoptimized', 'Predicted - ESN optimized'], loc = "upper center")
     plt.xlim([-0.02,0.62])
     plt.ylim([-0.02e6,1.1e6])
 
-    plt.xlabel('x [um]');
-    plt.ylabel('Electron density [um^{-3}]');
+    plt.xlabel('x [\mum]');
+    plt.ylabel('Electron density [\mum^{-3}]');
 
 
     
