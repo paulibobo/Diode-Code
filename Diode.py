@@ -1,7 +1,7 @@
 import os
 import time
 import argparse
-
+import math
 
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
@@ -11,6 +11,7 @@ from sklearn.metrics import mean_squared_error
 from pyrcn.echo_state_network import ESNRegressor
 
 
+#print(sys.version)
 parser = argparse.ArgumentParser()
 parser.add_argument('-epochs', type=int, default=2)
 parser.add_argument('-interpolations', type=int, default=2)
@@ -26,7 +27,7 @@ epochs = opt.epochs #number of epochs
 r_size = opt.reservoir_size
 spars = opt.sparsity
 datafile_path = opt.savepath
-plot = opt.plots
+plotst = opt.plots
 train = opt.train
 
 if(train == True):
@@ -35,8 +36,8 @@ if(train == True):
     dataArrayy = [] 
     
     files= 0
-    for filename in os.listdir("Train"): #Read training data
-            fname = "Train/" + filename
+    for filename in os.listdir("L_06/Train"): #Read training data
+            fname = "L_06/Train/" + filename
             with open(fname) as f:
                 files+=1
                 tempArrayx = [] 
@@ -99,8 +100,8 @@ if(train == True):
     dataArrayy2 = [] 
     
     files= 0
-    for filename in os.listdir("Test"): #Read testing data
-            fname = "Test/" + filename
+    for filename in os.listdir("L_06/Test"): #Read testing data
+            fname = "L_06/Test/" + filename
             with open(fname) as f:
                 files+=1
                 tempArrayx = [] 
@@ -156,7 +157,7 @@ if(train == True):
         newtesty.append(temparr)
         newtestx.append(temparrx)
     
-    
+
      
     k=0
     
@@ -204,9 +205,10 @@ if(train == True):
             y_pred[i]=y_pred2[i]
     
     
-    #Compute MSE
+    #Plot figure and compute MSE
     
     mse = mean_squared_error(np.array(newtesty[0])[:,0],y_pred[:]) 
+    mse = math.sqrt(mse)/16000
     print("MSE for dataset "": " + str(mse) + " Training time:" + str(end - start) + " seconds")
     
     
@@ -219,12 +221,13 @@ if(train == True):
         fileprint.append([np.array(newtestx[0])[k,0],num2])
         k+=1
     
-
+    
     np.savetxt(datafile_path , fileprint, fmt=['%10.7f','%10.7f'])
         
 
 
-if(plot == True):
+if(plotst == True):
+
     
     plotArray = []
     fname = "res/true.dat"
@@ -289,21 +292,22 @@ if(plot == True):
     
     xESNo = plotArray[:,0]   # position [um]
     rhoESNo = plotArray[:,1] #electron density [um^(-3)]
-    
 
+    
     plt.figure(0)
     plt.plot(xt,rhot, linewidth=2, color = (1,0,0))
     plt.plot(xGRU,rhoGRU, linestyle = 'dashed', linewidth = 2, color= (0,0.7,0))
     plt.plot(xESNu,rhoESNu, linestyle = 'dashed',  linewidth=2,  color=(1,0.6,0))
     plt.plot(xESNo,rhoESNo, linestyle = 'dashed', linewidth=2, color = (0,0,1))
+    
 
     plt.legend(['Ground-truth', 'Predicted - GRU',
       'Predicted - ESN unoptimized', 'Predicted - ESN optimized'], loc = "upper center")
     plt.xlim([-0.02,0.62])
     plt.ylim([-0.02e6,1.1e6])
 
-    plt.xlabel('x [\mum]');
-    plt.ylabel('Electron density [\mum^{-3}]');
+    plt.xlabel('x [um]');
+    plt.ylabel('Electron density [um^{-3}]');
 
 
     
