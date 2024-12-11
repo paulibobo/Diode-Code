@@ -20,7 +20,7 @@ pip install -r requirements.txt
 To train the model(s) in the paper, run this command:
 
 ```train
-python Diode.py -epochs 2 -interpolations 2 -reservoir_size 3500 -sparsity 0.5 -savepath <path where to save the results to/> -plots True/False
+python Diode.py -epochs 20 -interpolations 2 -reservoir_size 3500 -sparsity 0.5 -savepath <path where to save the results to/> -plots True/False
 ```
 >📋 The input parameters for the training script are:
     * -epochs: The number of epochs to train the model
