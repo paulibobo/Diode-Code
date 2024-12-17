@@ -314,8 +314,8 @@ if(plot == True):
     plt.xlim([-0.02,0.82])
     plt.ylim([-0.02e6,1.1e6])
 
-    plt.xlabel('x [\mum]');
-    plt.ylabel('Electron density [\mum^{-3}]');
+    plt.xlabel('x [μm]');
+    plt.ylabel('Electron density [μm$^{-3}$]');
 
 
 

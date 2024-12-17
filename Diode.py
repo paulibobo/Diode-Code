@@ -14,7 +14,7 @@ from pyrcn.echo_state_network import ESNRegressor
 parser = argparse.ArgumentParser()
 parser.add_argument('-epochs', type=int, default=20)
 parser.add_argument('-interpolations', type=int, default=2)
-parser.add_argument('-reservoir_size', type=int, default=500)
+parser.add_argument('-reservoir_size', type=int, default=100)
 parser.add_argument('-sparsity', type=float, default=0.5)
 parser.add_argument('-savepath', type=str, default="res/Optimized.dat")
 parser.add_argument('-plots', type=bool, default=True)
@@ -306,8 +306,8 @@ if(plot == True):
     plt.xlim([-0.02,0.62])
     plt.ylim([-0.02e6,1.1e6])
 
-    plt.xlabel('x [\mum]');
-    plt.ylabel('Electron density [\mum^{-3}]');
+    plt.xlabel('x [μm]');
+    plt.ylabel('Electron density [μm$^{-3}$]');
 
 
     
